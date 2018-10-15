@@ -1,5 +1,5 @@
 module.exports = {
-    base: '/myvue/'
+    base: '/myvue/',
     themeConfig: {
         docsDir: 'docs',
         locales: {
