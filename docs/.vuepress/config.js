@@ -23,7 +23,11 @@ module.exports = {
                 ],
                 sidebar: [
                     '/默认slot',
-                    '/组件patch阶段'
+                    '/组件patch阶段',
+                    '/props',
+                    '/attrs',
+                    '/patch',
+                    '/listeners'
                 ]
             }
         },
