@@ -27,7 +27,9 @@ module.exports = {
                     '/props',
                     '/attrs',
                     '/patch',
-                    '/listeners'
+                    '/listeners',
+                    '/ref',
+                    '/functional component'
                 ]
             }
         },
