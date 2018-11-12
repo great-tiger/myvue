@@ -29,7 +29,8 @@ module.exports = {
                     '/patch',
                     '/listeners',
                     '/ref',
-                    '/functional component'
+                    '/functional component',
+                    '/update component'
                 ]
             }
         },
