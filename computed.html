@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>计算属性</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/myvue/assets/css/styles.0ed13fd6.css" as="style"><link rel="preload" href="/myvue/assets/js/app.0ed13fd6.js" as="script"><link rel="preload" href="/myvue/assets/js/5.418053be.js" as="script"><link rel="prefetch" href="/myvue/assets/js/4.291f75a5.js"><link rel="prefetch" href="/myvue/assets/css/1.styles.609f56ce.css"><link rel="prefetch" href="/myvue/assets/js/1.609f56ce.js"><link rel="prefetch" href="/myvue/assets/css/2.styles.85337e5e.css"><link rel="prefetch" href="/myvue/assets/js/2.85337e5e.js"><link rel="prefetch" href="/myvue/assets/js/3.73a61e2b.js"><link rel="prefetch" href="/myvue/assets/js/6.3985446b.js"><link rel="prefetch" href="/myvue/assets/js/7.60a7156d.js"><link rel="prefetch" href="/myvue/assets/js/8.8bf40752.js"><link rel="prefetch" href="/myvue/assets/js/9.f2786eb3.js"><link rel="prefetch" href="/myvue/assets/js/10.656d0ee4.js"><link rel="prefetch" href="/myvue/assets/js/11.db2bcfb9.js"><link rel="prefetch" href="/myvue/assets/js/12.1faa0bf6.js"><link rel="prefetch" href="/myvue/assets/js/13.5642dc66.js">
+    <link rel="stylesheet" href="/myvue/assets/css/styles.0ed13fd6.css"><link rel="stylesheet" href="/myvue/assets/css/1.styles.609f56ce.css"><link rel="stylesheet" href="/myvue/assets/css/2.styles.85337e5e.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/myvue/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/myvue/guide/" class="nav-link">指南</a></div><div class="nav-item"><a href="/myvue/config/" class="nav-link">配置参考</a></div><div class="nav-item"><a href="/myvue/default-theme-config/" class="nav-link">默认主题配置</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/myvue/guide/" class="nav-link">指南</a></div><div class="nav-item"><a href="/myvue/config/" class="nav-link">配置参考</a></div><div class="nav-item"><a href="/myvue/default-theme-config/" class="nav-link">默认主题配置</a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/myvue/默认slot.html" class="sidebar-link">slot 处理过程</a></li><li><a href="/myvue/组件patch阶段.html" class="sidebar-link">patch阶段组件处理相关逻辑</a></li><li><a href="/myvue/props.html" class="sidebar-link">props</a></li><li><a href="/myvue/attrs.html" class="sidebar-link">$attrs</a></li><li><a href="/myvue/patch.html" class="sidebar-link">Patch</a></li><li><a href="/myvue/listeners.html" class="sidebar-link">listeners</a></li><li><a href="/myvue/ref.html" class="sidebar-link">$ref</a></li><li><a href="/myvue/functional component.html" class="sidebar-link">函数式组件</a></li><li><a href="/myvue/update component.html" class="sidebar-link">组件更新解析</a></li><li><a href="/myvue/computed.html" class="active sidebar-link">计算属性</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/myvue/computed.html#源码解析" class="sidebar-link">源码解析</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/myvue/computed.html#范例" class="sidebar-link">范例</a></li><li class="sidebar-sub-header"><a href="/myvue/computed.html#计算属性初始化" class="sidebar-link">计算属性初始化</a></li><li class="sidebar-sub-header"><a href="/myvue/computed.html#computedgetter" class="sidebar-link">computedGetter</a></li><li class="sidebar-sub-header"><a href="/myvue/computed.html#触发更新" class="sidebar-link">触发更新</a></li></ul></li></ul></li></ul> </div> <div class="page"> <div class="content"><h1 id="计算属性"><a href="#计算属性" aria-hidden="true" class="header-anchor">#</a> 计算属性</h1> <h2 id="源码解析"><a href="#源码解析" aria-hidden="true" class="header-anchor">#</a> 源码解析</h2> <h3 id="范例"><a href="#范例" aria-hidden="true" class="header-anchor">#</a> 范例</h3> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">const</span> vm <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    template<span class="token punctuation">:</span> <span class="token string">'&lt;div&gt;{{ b }}&lt;/div&gt;'</span><span class="token punctuation">,</span>
+    data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        a<span class="token punctuation">:</span> <span class="token number">1</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    computed<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token function">b</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>a <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">$mount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+vm<span class="token punctuation">.</span>a <span class="token operator">=</span> <span class="token number">2</span>
+</code></pre></div><h3 id="计算属性初始化"><a href="#计算属性初始化" aria-hidden="true" class="header-anchor">#</a> 计算属性初始化</h3> <blockquote><p>src/core/instance/state.js</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">initState</span> <span class="token punctuation">(</span>vm<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  vm<span class="token punctuation">.</span>_watchers <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword">const</span> opts <span class="token operator">=</span> vm<span class="token punctuation">.</span>$options
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>opts<span class="token punctuation">.</span>props<span class="token punctuation">)</span> <span class="token function">initProps</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> opts<span class="token punctuation">.</span>props<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>opts<span class="token punctuation">.</span>methods<span class="token punctuation">)</span> <span class="token function">initMethods</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> opts<span class="token punctuation">.</span>methods<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>opts<span class="token punctuation">.</span>data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">initData</span><span class="token punctuation">(</span>vm<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// 初始化计算属性</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>opts<span class="token punctuation">.</span>computed<span class="token punctuation">)</span> <span class="token function">initComputed</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> opts<span class="token punctuation">.</span>computed<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>初始化计算属性相关代码</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// 该函数的主要作用：创建一个 computed watcher，并保存到 vm._computedWatchers。</span>
+<span class="token keyword">function</span> <span class="token function">initComputed</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> computed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> watchers <span class="token operator">=</span> vm<span class="token punctuation">.</span>_computedWatchers <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> key <span class="token keyword">in</span> computed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> userDef <span class="token operator">=</span> computed<span class="token punctuation">[</span>key<span class="token punctuation">]</span>
+        <span class="token keyword">const</span> getter <span class="token operator">=</span> <span class="token keyword">typeof</span> userDef <span class="token operator">===</span> <span class="token string">'function'</span> <span class="token operator">?</span> userDef <span class="token punctuation">:</span> userDef<span class="token punctuation">.</span><span class="token keyword">get</span>
+
+        <span class="token comment">// create internal watcher for the computed property.</span>
+        watchers<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Watcher</span><span class="token punctuation">(</span>
+            vm<span class="token punctuation">,</span>
+            getter <span class="token operator">||</span> noop<span class="token punctuation">,</span>
+            noop<span class="token punctuation">,</span>
+            <span class="token punctuation">{</span> computed<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 删除了一些判断，理解主要逻辑</span>
+        <span class="token function">defineComputed</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> key<span class="token punctuation">,</span> userDef<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">defineComputed</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> key<span class="token punctuation">,</span> userDef<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 只考虑 userDef 为 function 的情况</span>
+    <span class="token comment">// 删除了一些代码</span>
+    sharedPropertyDefinition<span class="token punctuation">.</span><span class="token keyword">get</span> <span class="token operator">=</span> <span class="token function">createComputedGetter</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    sharedPropertyDefinition<span class="token punctuation">.</span><span class="token keyword">set</span> <span class="token operator">=</span> noop
+    Object<span class="token punctuation">.</span><span class="token function">defineProperty</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> key<span class="token punctuation">,</span> sharedPropertyDefinition<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">createComputedGetter</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">computedGetter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> watcher <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>_computedWatchers <span class="token operator">&amp;&amp;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>_computedWatchers<span class="token punctuation">[</span>key<span class="token punctuation">]</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>watcher<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            watcher<span class="token punctuation">.</span><span class="token function">depend</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> watcher<span class="token punctuation">.</span><span class="token function">evaluate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>上面的代码总结起来主要完成了两项工作：</p> <ol><li>为配置中的每一个计算属性生成一个 computed watcher, 这些 computed watcher 保存到了 vm._computedWatchers 中。</li> <li>使用Object.defineProperty,把计算属性定义到vm上。</li></ol> <p>通过上面的分析，我们知道计算属性最终会被定义到vm上（通过 Object.defineProperty）。<code>computedGetter</code> 就是定义中的get函数。接下来我们重点关注一下该函数。</p> <h3 id="computedgetter"><a href="#computedgetter" aria-hidden="true" class="header-anchor">#</a> computedGetter</h3> <p>computedGetter 函数，分三部分理解</p> <ol><li>从 <code>_computedWatchers</code> 中找到计算属性 <code>key</code> 对应的 watcher</li> <li>watcher.depend()</li> <li>watcher.evaluate()</li></ol> <h4 id="watcher-depend"><a href="#watcher-depend" aria-hidden="true" class="header-anchor">#</a> watcher.depend()</h4> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Watcher</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span> <span class="token punctuation">(</span>
+    vm<span class="token punctuation">:</span> Component<span class="token punctuation">,</span>
+    expOrFn<span class="token punctuation">:</span> string <span class="token operator">|</span> Function<span class="token punctuation">,</span>
+    cb<span class="token punctuation">:</span> Function<span class="token punctuation">,</span>
+    options<span class="token operator">?</span><span class="token punctuation">:</span> <span class="token operator">?</span>Object<span class="token punctuation">,</span>
+    isRenderWatcher<span class="token operator">?</span><span class="token punctuation">:</span> boolean
+  <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// computed watcher实例化时没有调用 get 方法</span>
+    <span class="token comment">// computed watcher内部增加了一个dep 对象</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>computed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> undefined
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dep <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Dep</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">evaluate</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dirty<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>value
+  <span class="token punctuation">}</span>
+	
+  <span class="token comment">// computed watcher 特有的方法</span>
+  <span class="token function">depend</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dep <span class="token operator">&amp;&amp;</span> Dep<span class="token punctuation">.</span>target<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dep<span class="token punctuation">.</span><span class="token function">depend</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p>computed 属性特有的逻辑</p> <ol><li>computed watcher 特有的方法depend</li> <li>computed watcher 有一个依赖收集器 dep</li> <li>computed watcher 实例化的时候没有调用this.get()直接求值</li></ol> <p>知道了上面3点后，我们再看一下depend具体干什么用的？</p> <p>我们先把相关的代码整理一下</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// watcher.js</span>
+<span class="token function">depend</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dep <span class="token operator">&amp;&amp;</span> Dep<span class="token punctuation">.</span>target<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dep<span class="token punctuation">.</span><span class="token function">depend</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// dep.js</span>
+<span class="token function">depend</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>Dep<span class="token punctuation">.</span>target<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      Dep<span class="token punctuation">.</span>target<span class="token punctuation">.</span><span class="token function">addDep</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// watcher.js</span>
+<span class="token function">addDep</span> <span class="token punctuation">(</span>dep<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> id <span class="token operator">=</span> dep<span class="token punctuation">.</span>id
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>newDepIds<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>newDepIds<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>newDeps<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>dep<span class="token punctuation">)</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>depIds<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 主要关注</span>
+        dep<span class="token punctuation">.</span><span class="token function">addSub</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// dep.js</span>
+<span class="token function">addSub</span> <span class="token punctuation">(</span>sub<span class="token punctuation">:</span> Watcher<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">this</span><span class="token punctuation">.</span>subs<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>sub<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>上面的代码完成了什么功能呢？</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// watcher.js</span>
+<span class="token function">depend</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dep <span class="token operator">&amp;&amp;</span> Dep<span class="token punctuation">.</span>target<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 把 Dep.target 存储到 this.dep.subs 中</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dep<span class="token punctuation">.</span><span class="token function">depend</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Dep.target 是什么呢？</p> <p>Dep.target 保存的是当前正在求值的 watcher。可以从下面的代码看出</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// watcher.js</span>
+<span class="token keyword">get</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 设置 Dep.target = this</span>
+    <span class="token function">pushTarget</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 求值</span>
+      value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>getter<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> vm<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token function">popTarget</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> value
+<span class="token punctuation">}</span>
+</code></pre></div><p>通俗的说，computed watcher 中的 dep 收集的是依赖于该计算属性的 watcher。</p> <h4 id="watcher-evaluate"><a href="#watcher-evaluate" aria-hidden="true" class="header-anchor">#</a> watcher.evaluate()</h4> <p>evaluate作用就是求值</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// watcher.js</span>
+<span class="token function">evaluate</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dirty<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>value
+<span class="token punctuation">}</span>
+
+<span class="token keyword">get</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 设置 Dep.target = this</span>
+    <span class="token function">pushTarget</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 求值</span>
+      value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>getter<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> vm<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token function">popTarget</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> value
+<span class="token punctuation">}</span>
+</code></pre></div><p>通过范例我们知道计算属性 b 等于 a + 1 (计算属性b对应的watcher，我们记做b-watcher)。对计算属性 b 求值的时候，会执行 get 方法，该方法首先设置 Dep.target 为 b-watcher。然后执行 this.getter 的时候，会触发 a 属性的get函数。在该函数内部会收集b-watcher到a属性对应的依赖收集器dep。这样我们改变 a 的时候，就可以执行 dep.notify() 通知到。相关代码如下：</p> <blockquote><p>src/core/observer/index.js</p></blockquote> <div class="language-javascript extra-class"><pre class="language-javascript"><code>Object<span class="token punctuation">.</span><span class="token function">defineProperty</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    enumerable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    configurable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token keyword">get</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token function">reactiveGetter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> value <span class="token operator">=</span> getter <span class="token operator">?</span> getter<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span> <span class="token punctuation">:</span> val
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>Dep<span class="token punctuation">.</span>target<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            dep<span class="token punctuation">.</span><span class="token function">depend</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> value
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token keyword">set</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token function">reactiveSetter</span><span class="token punctuation">(</span>newVal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        dep<span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre></div><h3 id="触发更新"><a href="#触发更新" aria-hidden="true" class="header-anchor">#</a> 触发更新</h3> <p>当我们执行 vm.a = 2 的时候，会开始更新过程 dep.notify()</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// dep.js</span>
+<span class="token function">notify</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">/*
+      this.subs.slice() 对数组做拷贝，对订阅者列表做稳定化处理
+    */</span>
+    <span class="token comment">// stabilize the subscriber list first</span>
+    <span class="token keyword">const</span> subs <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>subs<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> l <span class="token operator">=</span> subs<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> l<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>subs<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>具体的更新逻辑如下：</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// watcher.js</span>
+<span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>computed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getAndInvoke</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>dep<span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">getAndInvoke</span><span class="token punctuation">(</span>cb<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment">// 只有值改变以后才触发</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">!==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">||</span> <span class="token function">isObject</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>deep<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> oldValue <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>value
+        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value
+        <span class="token keyword">this</span><span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token boolean">false</span>
+        cb<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>vm<span class="token punctuation">,</span> value<span class="token punctuation">,</span> oldValue<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这里主要关注一下 update 中的this.dep.notify()</p> <p>通知的就是依赖于该计算属性的watcher。</p></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/myvue/update component.html" class="prev">
+          组件更新解析
+        </a></span> <!----></p></div> </div> <!----></div></div>
+    <script src="/myvue/assets/js/5.418053be.js" defer></script><script src="/myvue/assets/js/app.0ed13fd6.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>patch阶段组件处理相关逻辑</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/myvue/assets/css/styles.0ed13fd6.css" as="style"><link rel="preload" href="/myvue/assets/js/app.0ed13fd6.js" as="script"><link rel="preload" href="/myvue/assets/js/12.1faa0bf6.js" as="script"><link rel="prefetch" href="/myvue/assets/js/4.291f75a5.js"><link rel="prefetch" href="/myvue/assets/css/1.styles.609f56ce.css"><link rel="prefetch" href="/myvue/assets/js/1.609f56ce.js"><link rel="prefetch" href="/myvue/assets/css/2.styles.85337e5e.css"><link rel="prefetch" href="/myvue/assets/js/2.85337e5e.js"><link rel="prefetch" href="/myvue/assets/js/3.73a61e2b.js"><link rel="prefetch" href="/myvue/assets/js/5.418053be.js"><link rel="prefetch" href="/myvue/assets/js/6.3985446b.js"><link rel="prefetch" href="/myvue/assets/js/7.60a7156d.js"><link rel="prefetch" href="/myvue/assets/js/8.8bf40752.js"><link rel="prefetch" href="/myvue/assets/js/9.f2786eb3.js"><link rel="prefetch" href="/myvue/assets/js/10.656d0ee4.js"><link rel="prefetch" href="/myvue/assets/js/11.db2bcfb9.js"><link rel="prefetch" href="/myvue/assets/js/13.5642dc66.js">
+    <link rel="stylesheet" href="/myvue/assets/css/styles.0ed13fd6.css"><link rel="stylesheet" href="/myvue/assets/css/1.styles.609f56ce.css"><link rel="stylesheet" href="/myvue/assets/css/2.styles.85337e5e.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/myvue/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/myvue/guide/" class="nav-link">指南</a></div><div class="nav-item"><a href="/myvue/config/" class="nav-link">配置参考</a></div><div class="nav-item"><a href="/myvue/default-theme-config/" class="nav-link">默认主题配置</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/myvue/guide/" class="nav-link">指南</a></div><div class="nav-item"><a href="/myvue/config/" class="nav-link">配置参考</a></div><div class="nav-item"><a href="/myvue/default-theme-config/" class="nav-link">默认主题配置</a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/myvue/默认slot.html" class="sidebar-link">slot 处理过程</a></li><li><a href="/myvue/组件patch阶段.html" class="active sidebar-link">patch阶段组件处理相关逻辑</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/myvue/组件patch阶段.html#createelm" class="sidebar-link">createElm</a></li><li class="sidebar-sub-header"><a href="/myvue/组件patch阶段.html#createcomponent" class="sidebar-link">createComponent</a></li><li class="sidebar-sub-header"><a href="/myvue/组件patch阶段.html#init-钩子" class="sidebar-link">init 钩子</a></li><li class="sidebar-sub-header"><a href="/myvue/组件patch阶段.html#initcomponent" class="sidebar-link">initComponent</a></li></ul></li><li><a href="/myvue/props.html" class="sidebar-link">props</a></li><li><a href="/myvue/attrs.html" class="sidebar-link">$attrs</a></li><li><a href="/myvue/patch.html" class="sidebar-link">Patch</a></li><li><a href="/myvue/listeners.html" class="sidebar-link">listeners</a></li><li><a href="/myvue/ref.html" class="sidebar-link">$ref</a></li><li><a href="/myvue/functional component.html" class="sidebar-link">函数式组件</a></li><li><a href="/myvue/update component.html" class="sidebar-link">组件更新解析</a></li><li><a href="/myvue/computed.html" class="sidebar-link">计算属性</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="patch阶段组件处理相关逻辑"><a href="#patch阶段组件处理相关逻辑" aria-hidden="true" class="header-anchor">#</a> patch阶段组件处理相关逻辑</h1> <h2 id="createelm"><a href="#createelm" aria-hidden="true" class="header-anchor">#</a> createElm</h2> <p>createElm ( vnode, insertedVnodeQueue, parentElm, refElm, nested,ownerArray, index )</p> <p>core/vdom/patch.js</p> <p>该函数的作用就是 为vnode生成真实的dom (被保存到了 vnode.elm 中)， 并把真实的dom插入到 parentElm 中</p> <p>并且保证在 refElm 之前</p> <div class="language- extra-class"><pre class="language-text"><code>function createElm (
+    vnode,
+    insertedVnodeQueue,
+    parentElm,
+    refElm,
+    nested,
+    ownerArray,
+    index
+  ) {
+    // 如果 vnode 是一个组件的话，直接由 createComponent 处理
+    if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
+      return
+    }
+  }
+</code></pre></div><h2 id="createcomponent"><a href="#createcomponent" aria-hidden="true" class="header-anchor">#</a> createComponent</h2> <p>core/vdom/patch.js</p> <div class="language- extra-class"><pre class="language-text"><code>function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
+    let i = vnode.data
+    if (isDef(i)) {
+      if (isDef(i = i.hook) &amp;&amp; isDef(i = i.init)) {
+      	// 调用 init 钩子，这个钩子具体干了点什么呢？请看下一小节
+      	// 如果 vnode 是一个子组件的话
+        // 会创建一个子实例 componentInstance 并且 mount 它。
+        i(vnode, false /* hydrating */)
+      }
+      // after calling the init hook, if the vnode is a child component
+      // it should've created a child instance and mounted it. the child
+      // component also has set the placeholder vnode's elm.
+      // in that case we can just return the element and be done.
+      // 上面的注释说的很清楚。init 钩子被调用之后，如果 vnode 是一个子组件的话
+      // 会创建一个子实例 componentInstance 并且 mount 它。
+      // componentInstance 就是一个 vm 对象
+      if (isDef(vnode.componentInstance)) {
+      	// 我们知道 mount 完之后，componentInstance.$el 就是真实的 dom
+      	// 下面这个方法的作用就是 vnode.elm = vnode.componentInstance.$el
+        initComponent(vnode, insertedVnodeQueue)
+        insert(parentElm, vnode.elm, refElm)
+        return true
+      }
+    }
+  }
+</code></pre></div><h2 id="init-钩子"><a href="#init-钩子" aria-hidden="true" class="header-anchor">#</a> init 钩子</h2> <p>core/vdom/create-component.js</p> <div class="language- extra-class"><pre class="language-text"><code>const componentVNodeHooks = {
+  init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
+    if (
+      vnode.componentInstance &amp;&amp;
+      !vnode.componentInstance._isDestroyed &amp;&amp;
+      vnode.data.keepAlive
+    ) {
+      // kept-alive components, treat as a patch
+      const mountedNode: any = vnode // work around flow
+      componentVNodeHooks.prepatch(mountedNode, mountedNode)
+    } else {
+      const child = vnode.componentInstance = createComponentInstanceForVnode(
+        vnode,
+        activeInstance
+      )
+      child.$mount(hydrating ? vnode.elm : undefined, hydrating)
+    }
+  }
+}
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>// 为Vnode创建组件实例，名称起的很清楚
+export function createComponentInstanceForVnode (
+  vnode: any, // we know it's MountedComponentVNode but flow doesn't
+  parent: any, // activeInstance in lifecycle state
+): Component {
+  // 这里传入了 parent，parent 指的父级 vm
+  const options: InternalComponentOptions = {
+    _isComponent: true,
+    _parentVnode: vnode,
+    parent
+  }
+  return new vnode.componentOptions.Ctor(options)
+}
+</code></pre></div><h2 id="initcomponent"><a href="#initcomponent" aria-hidden="true" class="header-anchor">#</a> initComponent</h2> <p>core/vdom/patch.js</p> <div class="language- extra-class"><pre class="language-text"><code>function initComponent (vnode, insertedVnodeQueue) {
+	// 删除了一些次要逻辑
+    vnode.elm = vnode.componentInstance.$el
+}
+</code></pre></div></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/myvue/assets/js/12.1faa0bf6.js" defer></script><script src="/myvue/assets/js/app.0ed13fd6.js" defer></script>
+  </body>
+</html>
